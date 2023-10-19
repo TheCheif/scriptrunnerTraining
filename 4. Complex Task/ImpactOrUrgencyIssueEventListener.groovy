@@ -18,25 +18,15 @@ def change = issueEvent.getChangeLog().getRelated("ChildChangeItem").find {
 }
 
 if (change) {
-    def value = change.get("newstring") as String
-
     def urgencyFields = customFieldManager.getCustomFieldObjectsByName(allowedFields[1])
     def impactFields = customFieldManager.getCustomFieldObjectsByName(allowedFields[0])
     assert urgencyFields.size() == 1
     assert impactFields.size() == 1
 
-    def oldUrgency = issueEvent.getIssue().getCustomFieldValue(urgencyFields[0]) as String
-    def oldImpact = issueEvent.getIssue().getCustomFieldValue(impactFields[0]) as String
+    def urgency = issueEvent.getIssue().getCustomFieldValue(urgencyFields[0]) as String
+    def impact = issueEvent.getIssue().getCustomFieldValue(impactFields[0]) as String
 
-    Priority priority
-    switch (change.get("field")) {
-        case allowedFields[0]:
-            priority = PriorityMatrix.getPriorityByUrgencyAndImpact(oldUrgency, value)
-            break
-        case allowedFields[1]:
-            priority = PriorityMatrix.getPriorityByUrgencyAndImpact(value, oldImpact)
-            break
-    }
+    Priority priority = PriorityMatrix.getPriorityByUrgencyAndImpact(urgency, impact)
 
     if (priority) {
         issue.setPriority(priority)
