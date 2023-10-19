@@ -52,7 +52,7 @@ class Helpers {
         if (result.isValid()) {
             issueService.update(user, result, EventDispatchOption.DO_NOT_DISPATCH, false)
         } else {
-            log.error("Could not add resolution to issue. Error: " + result.toString())
+            log.error("Could not edit description of issue. Error: " + result.toString())
         }
     }
 
